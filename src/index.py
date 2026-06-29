@@ -118,6 +118,13 @@ async def handle_message(msg: dict, db, token: str):
     name = user.get("first_name", "") + " " + user.get("last_name", "")
     name = name.strip() or username or "Manager"
 
+    if text == "/debug":
+        result = await db.prepare("SELECT * FROM leagues LIMIT 1").first()
+        print(f"TYPE: {type(result)}")
+        print(f"DIR: {dir(result)}")
+        await send_message(token, chat_id, str(type(result)))
+        return
+
     if text == "/start":
         manager = await get_manager(db, chat_id)
         if manager and manager.get("club_id"):
